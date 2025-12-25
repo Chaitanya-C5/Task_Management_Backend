@@ -50,7 +50,6 @@ export const createTask = async (req, res) => {
           status: task.status,
           priority: task.priority,
           dueDate: task.dueDate,
-          category: task.category,
           tags: task.tags,
           estimatedHours: task.estimatedHours,
           user: task.user,

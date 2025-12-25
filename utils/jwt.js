@@ -2,8 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || process.env.JWT_ACCESS_SECRET;
-const JWT_EXPIRE = process.env.JWT_ACCESS_EXPIRES_IN || '3600s';
-const JWT_REFRESH_EXPIRE = process.env.JWT_REFRESH_EXPIRES_IN || '604800s';
+
 
 export const signAccessToken = (userId, role) => {
   return jwt.sign(
@@ -14,7 +13,7 @@ export const signAccessToken = (userId, role) => {
     },
     JWT_SECRET,
     { 
-      expiresIn: JWT_EXPIRE
+      expiresIn: "3600s"
     }
   );
 };
@@ -28,15 +27,14 @@ export const signRefreshToken = (userId, role) => {
     },
     JWT_REFRESH_SECRET,
     { 
-      expiresIn: JWT_REFRESH_EXPIRE
+      expiresIn: "604800s"
     }
   );
 };
 
 export const verifyAccessToken = (token) => {
   try {
-    return jwt.verify(token, JWT_SECRET, {
-    });
+    return jwt.verify(token, JWT_SECRET);
   } catch {
     throw new Error('Invalid access token');
   }
@@ -44,8 +42,7 @@ export const verifyAccessToken = (token) => {
 
 export const verifyRefreshToken = (token) => {
   try {
-    return jwt.verify(token, JWT_REFRESH_SECRET, {
-    });
+    return jwt.verify(token, JWT_REFRESH_SECRET);
   } catch {
     throw new Error('Invalid refresh token');
   }
@@ -59,7 +56,7 @@ export const generateTokenPair = (userId, role) => {
     tokens: {
       accessToken,
       refreshToken,
-      expiresIn: JWT_EXPIRE
+      expiresIn: "3600s" 
     }
   };
 };

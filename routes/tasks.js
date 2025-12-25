@@ -13,25 +13,28 @@ import {
   createTaskValidation,
   updateTaskValidation,
   updateStatusValidation,
-  updatePriorityValidation
+  updatePriorityValidation,
+  searchQueryValidation,
+  routeParamValidation
 } from '../utils/validation.js';
 
 const router = express.Router();
 
+// All task routes require authentication
 router.use(authenticate);
 
 router.post('/', createTaskValidation, createTask);
 
-router.get('/', getTasks);
+router.get('/', searchQueryValidation, getTasks);
 
-router.get('/:id', getTask);
+router.get('/:id', routeParamValidation, getTask);
 
-router.put('/:id', updateTaskValidation, updateTask);
+router.put('/:id', [...routeParamValidation, ...updateTaskValidation], updateTask);
 
-router.delete('/:id', deleteTask);
+router.delete('/:id', routeParamValidation, deleteTask);
 
-router.put('/:id/status', updateStatusValidation, updateTaskStatus);
+router.put('/:id/status', [...routeParamValidation, ...updateStatusValidation], updateTaskStatus);
 
-router.put('/:id/priority', updatePriorityValidation, updateTaskPriority);
+router.put('/:id/priority', [...routeParamValidation, ...updatePriorityValidation], updateTaskPriority);
 
 export default router;

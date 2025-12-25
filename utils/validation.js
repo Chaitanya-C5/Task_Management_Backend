@@ -1,6 +1,9 @@
 import { body } from 'express-validator';
+import { sanitizeInput, sanitizeXSS, sanitizeSearchQuery, sanitizeRouteParams } from '../middleware/sanitize.js';
 
 export const registerValidation = [
+  sanitizeInput('username'),
+  sanitizeInput('email'),
   body('username')
     .trim()
     .isLength({ min: 3, max: 30 })
@@ -34,6 +37,8 @@ export const loginValidation = [
 ];
 
 export const createTaskValidation = [
+  sanitizeXSS('title'),
+  sanitizeXSS('description'),
   body('title')
     .trim()
     .isLength({ min: 1, max: 200 })
@@ -149,4 +154,24 @@ export const updatePriorityValidation = [
   body('priority')
     .isIn(['low', 'medium', 'high'])
     .withMessage('Priority must be low, medium, or high')
+];
+
+export const createCategoryValidation = [
+  sanitizeXSS('name'),
+  body('name')
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('Category name is required and cannot exceed 50 characters'),
+  
+  body('color')
+    .matches(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
+    .withMessage('Color must be a valid hex color (e.g., #FF5733 or #F53)')
+];
+
+export const searchQueryValidation = [
+  ...sanitizeSearchQuery
+];
+
+export const routeParamValidation = [
+  ...sanitizeRouteParams
 ];
