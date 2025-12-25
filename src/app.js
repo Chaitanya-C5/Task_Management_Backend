@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import authRoutes from '../routes/auth.js';
 
 configDotenv();
 
@@ -28,6 +29,8 @@ db();
 app.get('/', (req, res) => {
   res.json({ message: 'Task Management API is running' });
 });
+
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
