@@ -34,7 +34,6 @@ export const register = async (req, res) => {
 
     await user.save();
 
-    // Generate tokens
     const tokens = generateTokenPair(user._id, user.role);
 
     res.status(201).json({

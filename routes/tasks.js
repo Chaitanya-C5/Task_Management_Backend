@@ -18,7 +18,6 @@ import {
 
 const router = express.Router();
 
-// All task routes require authentication
 router.use(authenticate);
 
 router.post('/', createTaskValidation, createTask);

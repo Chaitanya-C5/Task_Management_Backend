@@ -16,7 +16,6 @@ export const createTask = async (req, res) => {
 
     const { title, description, priority, dueDate, category, tags, estimatedHours } = req.body;
 
-    // Validate category ownership if provided
     if (category) {
       const categoryDoc = await Category.findOne({ _id: category, user: req.user.id });
       if (!categoryDoc) {
@@ -109,7 +108,6 @@ export const getTasks = async (req, res) => {
 
     const total = await Task.countDocuments({ user: req.user.id, ...Task.findByUser(req.user.id, filters).getQuery() });
 
-    // Get stats
     const stats = await Task.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
       { $group: { _id: '$status', count: { $sum: 1 } } }
@@ -223,7 +221,6 @@ export const updateTask = async (req, res) => {
       });
     }
 
-    // Validate category ownership if provided
     if (category) {
       const categoryDoc = await Category.findOne({ _id: category, user: req.user.id });
       if (!categoryDoc) {
@@ -236,7 +233,6 @@ export const updateTask = async (req, res) => {
 
     const oldCategory = task.category;
     
-    // Update fields
     if (title !== undefined) task.title = title;
     if (description !== undefined) task.description = description;
     if (priority !== undefined) task.priority = priority;
@@ -249,7 +245,6 @@ export const updateTask = async (req, res) => {
     await task.save();
     await task.populate('category', 'name color');
 
-    // Update category task counts if category changed
     if (oldCategory !== category) {
       if (oldCategory) {
         await Category.findByIdAndUpdate(oldCategory, { $inc: { taskCount: -1 } });
@@ -334,7 +329,6 @@ export const updateTaskStatus = async (req, res) => {
       });
     }
 
-    // Validate status transition
     if (!task.canTransitionTo(status)) {
       return res.status(400).json({
         success: false,
@@ -386,7 +380,7 @@ export const updateTaskPriority = async (req, res) => {
         message: 'Task not found'
       });
     }
-
+    
     task.priority = priority;
     await task.save();
 
