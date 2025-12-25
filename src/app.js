@@ -8,6 +8,7 @@ import rateLimit from 'express-rate-limit';
 import authRoutes from '../routes/auth.js';
 import taskRoutes from '../routes/tasks.js';
 import categoryRoutes from '../routes/categories.js';
+import { errorHandler, notFoundHandler } from '../middleware/errorHandler.js';
 
 configDotenv();
 
@@ -43,6 +44,9 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/categories', categoryRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
