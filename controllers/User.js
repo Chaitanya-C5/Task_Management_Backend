@@ -44,8 +44,7 @@ export const register = async (req, res) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email,
-          role: user.role
+          email: user.email
         },
         ...tokens
       }
@@ -96,12 +95,6 @@ export const login = async (req, res) => {
       success: true,
       message: 'Login successful',
       data: {
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          role: user.role
-        },
         ...tokens
       }
     });
@@ -132,7 +125,6 @@ export const getCurrentUser = async (req, res) => {
           id: user._id,
           username: user.username,
           email: user.email,
-          role: user.role,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
         }

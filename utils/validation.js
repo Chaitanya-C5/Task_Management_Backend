@@ -32,3 +32,121 @@ export const loginValidation = [
     .notEmpty()
     .withMessage('Password is required')
 ];
+
+export const createTaskValidation = [
+  body('title')
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage('Title is required and cannot exceed 200 characters'),
+  
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Description cannot exceed 1000 characters'),
+  
+  body('priority')
+    .optional()
+    .isIn(['low', 'medium', 'high'])
+    .withMessage('Priority must be low, medium, or high'),
+  
+  body('dueDate')
+    .optional()
+    .isISO8601()
+    .withMessage('Due date must be a valid date')
+    .custom(value => {
+      if (new Date(value) <= new Date()) {
+        throw new Error('Due date must be in the future');
+      }
+      return true;
+    }),
+  
+  body('category')
+    .optional()
+    .isMongoId()
+    .withMessage('Category must be a valid ID'),
+  
+  body('tags')
+    .optional()
+    .isArray()
+    .withMessage('Tags must be an array'),
+  
+  body('tags.*')
+    .optional()
+    .trim()
+    .isLength({ max: 30 })
+    .withMessage('Each tag cannot exceed 30 characters'),
+  
+  body('estimatedHours')
+    .optional()
+    .isFloat({ min: 0, max: 1000 })
+    .withMessage('Estimated hours must be between 0 and 1000')
+];
+
+export const updateTaskValidation = [
+  body('title')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage('Title cannot exceed 200 characters'),
+  
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Description cannot exceed 1000 characters'),
+  
+  body('priority')
+    .optional()
+    .isIn(['low', 'medium', 'high'])
+    .withMessage('Priority must be low, medium, or high'),
+  
+  body('dueDate')
+    .optional()
+    .isISO8601()
+    .withMessage('Due date must be a valid date')
+    .custom(value => {
+      if (new Date(value) <= new Date()) {
+        throw new Error('Due date must be in the future');
+      }
+      return true;
+    }),
+  
+  body('category')
+    .optional()
+    .isMongoId()
+    .withMessage('Category must be a valid ID'),
+  
+  body('tags')
+    .optional()
+    .isArray()
+    .withMessage('Tags must be an array'),
+  
+  body('tags.*')
+    .optional()
+    .trim()
+    .isLength({ max: 30 })
+    .withMessage('Each tag cannot exceed 30 characters'),
+  
+  body('estimatedHours')
+    .optional()
+    .isFloat({ min: 0, max: 1000 })
+    .withMessage('Estimated hours must be between 0 and 1000'),
+  
+  body('actualHours')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Actual hours must be non-negative')
+];
+
+export const updateStatusValidation = [
+  body('status')
+    .isIn(['todo', 'in-progress', 'completed', 'archived'])
+    .withMessage('Status must be todo, in-progress, completed, or archived')
+];
+
+export const updatePriorityValidation = [
+  body('priority')
+    .isIn(['low', 'medium', 'high'])
+    .withMessage('Priority must be low, medium, or high')
+];
